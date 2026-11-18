@@ -65,6 +65,13 @@ def replace_text_in_paragraph(paragraph, replacements):
     """
     Replace placeholders in a paragraph, handling Word's run splitting.
     """
+    # First try replacing inside individual runs. This keeps hyperlinks,
+    # bold labels and line breaks in the paragraph intact.
+    for run in paragraph.runs:
+        for placeholder, value in replacements.items():
+            if placeholder in run.text:
+                run.text = run.text.replace(placeholder, value)
+
     # Get the full text of the paragraph
     full_text = paragraph.text
     
